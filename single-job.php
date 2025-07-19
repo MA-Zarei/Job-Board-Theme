@@ -16,7 +16,7 @@
 
     <nav class="navbar navbar-expand-lg bg-light navbar-light border-bottom shadow-sm   mb-4">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">کاریابی - ایسوس ایران</a>
+            <a class="navbar-brand" href="#">قالب سایت کاریابی</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
