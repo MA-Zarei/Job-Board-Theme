@@ -1,0 +1,25 @@
+body {
+    font-family: "Vazirmatn";
+    font-weight: 400;
+}
+
+/* mid part color for price filter slider */
+.noUi-connect {
+  background: var(--bs-primary);
+}
+
+/* avoid change accordion header on focus*/
+.accordion-button:not(.collapsed) {
+  background-color: transparent;
+  box-shadow: none;
+  color: inherit;
+}
+
+/* bold title for all filters*/
+.accordion-button {
+  font-weight: bold;
+}
+
+#sidebarOffcanvas {
+  width: 80%;
+}
