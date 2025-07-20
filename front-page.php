@@ -5,7 +5,8 @@
     <meta charset="UTF8">
     <title> سایت کاریابی</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/bootstrap/css/bootstrap.rtl.min.css">
+    <link rel="stylesheet"
+        href="<?php echo get_template_directory_uri(); ?>/assets/bootstrap/css/bootstrap.rtl.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.css">
     <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>./assets/css/font.css">
@@ -280,7 +281,8 @@
                             <div class="accordion-body">
                                 <label for="price-slider" class="form-label mb-3">محدوده قیمت (میلیون تومان)</label>
                                 <div id="price-slider"></div>
-                                <div class="mt-2 text-muted" id="price-output">از ۲٬۰۰۰٬۰۰۰ تا ۶٬۰۰۰٬۰۰۰ میلیون تومان</div>
+                                <div class="mt-2 text-muted" id="price-output">از ۲٬۰۰۰٬۰۰۰ تا ۶٬۰۰۰٬۰۰۰ میلیون تومان
+                                </div>
 
                                 <hr class="my-3">
 
@@ -432,6 +434,29 @@
         </div>
     </div>
     </div>
+
+    <footer class="bg-dark text-white mt-5 py-4">
+  <div class="container">
+    <div class="row text-center text-md-start align-items-center justify-content-between">
+
+      <!-- برند و کپی‌رایت -->
+      <div class="col-md-6 mb-3 mb-md-0">
+        <h6 class="fw-bold mb-2">سایت کاریابی</h6>
+        <small class="text-light d-block">© تمامی حقوق محفوظ است - ۱۴۰۴</small>
+      </div>
+
+      <!-- لینک‌های کاربردی -->
+      <div class="col-md-6 text-md-end">
+        <ul class="list-inline mb-0">
+          <li class="list-inline-item"><a href="#" class="text-light text-decoration-none">درباره ما</a></li>
+          <li class="list-inline-item"><a href="#" class="text-light text-decoration-none">تماس با ما</a></li>
+          <li class="list-inline-item"><a href="#" class="text-light text-decoration-none">سوالات متداول</a></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</footer>
 
     <!-- Bootstrap JS -->
     <script src="<?php echo get_template_directory_uri(); ?>./assets/bootstrap/js/bootstrap.bundle.min.js"></script>
