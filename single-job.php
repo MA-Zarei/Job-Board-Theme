@@ -5,7 +5,8 @@
     <meta charset="UTF8">
     <title>شرح شغل - UI/UX Designer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/bootstrap/css/bootstrap.rtl.min.css">
+    <link rel="stylesheet"
+        href="<?php echo get_template_directory_uri(); ?>/assets/bootstrap/css/bootstrap.rtl.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.css">
     <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>./assets/css/font.css">
@@ -14,37 +15,7 @@
 
 <body>
 
-    <nav class="navbar navbar-expand-lg bg-light navbar-light border-bottom shadow-sm   mb-4">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">قالب سایت کاریابی</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">ورود</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            حساب کاربری
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end start-auto">
-                            <li><a class="dropdown-item" href="#">درخواست‌های من</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="#">نشان شده‌ها</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <?php get_header(); ?>
 
     <!-- job details page -->
     <div class="container">
@@ -281,6 +252,7 @@
             </div>
         </div>
     </div>
+    <?php get_footer(); ?>
 
 
     <!-- Bootstrap JS -->
