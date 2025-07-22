@@ -31,8 +31,8 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            حساب کاربری
+                        <a class="nav-link" href="<?php echo wp_logout_url(home_url('/')); ?>">
+                            خروج
                         </a>
                     </li>
                 <?php } ?>
