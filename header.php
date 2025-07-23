@@ -24,7 +24,14 @@
                 <?php } else {
                     ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="<?php
+                        $current_user = wp_get_current_user();
+                        if (in_array('administrator', $current_user->roles)||in_array('employer', $current_user->roles)) {
+                            echo home_url('/employer-dashboard/');
+                        } elseif (in_array('jobseeker', $current_user->roles)) {
+                            echo home_url('/jobseeker-dashboard/');
+                        }
+                        ?>">
                             <?php
                             echo wp_get_current_user()->display_name;
                             ?>
