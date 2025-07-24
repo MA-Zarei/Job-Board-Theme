@@ -23,14 +23,20 @@
                 <div class="row mb-5">
                     <!-- main column: job details -->
                     <div class="col-12 col-lg-9 mb-4">
-                        <div class="row align-items-center g-4">
+                        <div class="d-flex flex-column flex-md-row align-items-start gap-4">
+                            <!-- تصویر کارفرما -->
+                            <div class="flex-shrink-0">
+                                <img src="<?= esc_url(get_field('company_logo', 'user_' . get_post_field('post_author')) ?: get_template_directory_uri() . '/assets/photo/placeholder.png') ?>"
+                                    alt="لوگوی <?= esc_attr(get_user_meta(get_post_field('post_author'), 'nickname', true) ?: get_the_author_meta('display_name', get_post_field('post_author'))) ?>"
+                                    class="img-fluid rounded shadow" width="96" height="96">
+                            </div>
 
-                            <!-- بخش متنی سمت چپ -->
-                            <div class="col-md-8">
-                                <h4 class="fw-bold mb-2"><?php echo esc_html(get_the_title()); ?></h4>
+                            <!-- اطلاعات آگهی -->
+                            <div class="flex-grow-1">
+                                <h4 class="fw-bold mb-2"><?= esc_html(get_the_title()); ?></h4>
 
                                 <p class="text-muted mb-1">
-                                    <?php echo esc_html(get_the_author_meta('nickname', get_post_field('post_author'))) . ' . ' . get_post_field('job_location'); ?>
+                                    <?= esc_html(get_the_author_meta('nickname', get_post_field('post_author'))) . ' . ' . get_post_field('job_location'); ?>
                                 </p>
 
                                 <p class="text-muted small">
@@ -38,21 +44,10 @@
                                     $type = get_field('job_type');
                                     $exp = get_field('job_experience');
                                     echo esc_html($type);
-                                    echo $exp ? ' . حداقل ' . esc_html($exp) . ' سال تجربه' : '';
+                                    echo $exp ? ' . حداقل ' . esc_html($exp) . ' سال تجربه' : ' . بدون نیاز به تجربه کاری مرتبط';
                                     ?>
                                 </p>
                             </div>
-
-                            <!-- تصویر سمت راست -->
-                            <div class="col-md-4 text-end">
-                                <?php
-                                $logo = get_field('company_logo', 'user_' . get_post_field('post_author'));
-                                if ($logo) {
-                                    echo wp_get_attachment_image($logo, 'medium', false, ['class' => 'img-fluid rounded shadow']);
-                                }
-                                ?>
-                            </div>
-
                         </div>
 
 
@@ -65,7 +60,7 @@
                         <hr>
                         <div class="d-flex justify-content-between align-items-center">
                             <span class="fw-bold text-primary">
-                                <?php echo (get_field('job_salary') ? 'حقوق تقریبی: ' . get_field('job_salary') . ' میلیون‌تومان در ماه' : 'توافقی') ?>
+                                <?php echo (get_field('job_salary') ? 'حقوق تقریبی: ' . get_field('job_salary') . ' میلیون‌تومان در ماه' : 'دستمزد توافقی') ?>
                             </span>
                         </div>
                         <hr>
@@ -114,161 +109,150 @@
                                 'posts_per_page' => 8,
                                 'orderby' => 'date',
                                 'order' => 'DESC',
+                                'meta_query' => [
+                                    'relation' => 'OR',
+                                    [
+                                        'key' => 'job_status',
+                                        'value' => 'غیرفعال',
+                                        'compare' => '!=',
+                                    ],
+                                    [
+                                        'key' => 'job_status',
+                                        'compare' => 'NOT EXISTS',
+                                    ]
+                                ]
                             ];
+
                             $job_cards = new WP_Query($job_posts);
-                            if ($job_cards->have_posts()) {
-                                while ($job_cards->have_posts()) {
+
+                            if ($job_cards->have_posts()):
+                                while ($job_cards->have_posts()):
                                     $job_cards->the_post();
+
+                                    $post_id = get_the_ID();
+                                    $employer_id = get_post_field('post_author', $post_id);
+                                    $employer_nick = get_user_meta($employer_id, 'nickname', true) ?: get_the_author_meta('display_name', $employer_id);
+                                    $employer_logo = get_field('company_logo', 'user_' . $employer_id);
+                                    $logo_url = $employer_logo ?: get_template_directory_uri() . '/assets/photo/placeholder.png';
+
                                     $post_timestamp = get_the_time('U');
                                     $current_timestamp = current_time('timestamp');
                                     $diff_days = floor(($current_timestamp - $post_timestamp) / DAY_IN_SECONDS);
-                                    if ($diff_days < 1) {
-                                        $date_text = 'امروز';
-                                    } else {
-                                        $date_text = $diff_days . ' روز پیش';
-                                    }
+                                    $date_text = ($diff_days < 1) ? 'امروز' : $diff_days . ' روز پیش';
+
+                                    $job_location = get_post_field('job_location', $post_id);
+                                    $job_type = get_field('job_type');
+                                    $job_experience = get_field('job_experience');
                                     ?>
+
                                     <!-- cards -->
                                     <div class="card shadow-sm border-0 mb-3">
                                         <div class="card-body d-flex gap-3 align-items-start">
-                                            <img src="https://via.placeholder.com/48x48.png?text=GJ" alt="Gojek Logo"
+                                            <img src="<?= esc_url($logo_url); ?>" alt="لوگوی <?= esc_attr($employer_nick); ?>"
                                                 class="rounded" width="48" height="48">
                                             <div class="flex-grow-1">
                                                 <h6 class="fw-bold mb-1">
-                                                    <a class="text-reset text-decoration-none"
-                                                        href="<?php echo get_permalink(); ?>">
-                                                        <?php echo get_the_title(); ?>
+                                                    <a class="text-reset text-decoration-none" href="<?= get_permalink(); ?>">
+                                                        <?= esc_html(get_the_title()); ?>
                                                     </a>
                                                 </h6>
                                                 <p class="text-muted small mb-1">
-                                                    <?php echo esc_html(get_the_author_meta('nickname', get_post_field('post_author'))) . ' . ' . get_post_field('job_location'); ?>
+                                                    <?= esc_html($employer_nick . ' . ' . $job_location); ?>
                                                 </p>
                                                 <div class="d-flex flex-wrap gap-2 mb-2">
+                                                    <?php if ($job_type): ?>
+                                                        <span class="badge bg-light text-dark"><?= esc_html($job_type); ?></span>
+                                                    <?php endif; ?>
                                                     <span class="badge bg-light text-dark">
-                                                        <?php
-                                                        echo get_field('job_type');
-                                                        ?>
-                                                    </span>
-                                                    <span class="badge bg-light text-dark">
-                                                        <?php
-                                                        echo get_field('job_experience') ? ' حداقل ' . get_field('job_experience') . ' سال تجربه' : '';
-                                                        ?>
+                                                        <?= $job_experience ? ' حداقل ' . esc_html($job_experience) . ' سال تجربه' : 'بدون نیاز به تجربه مرتبط'; ?>
                                                     </span>
                                                 </div>
-                                                <p class="text-muted small mb-0">
-                                                    <?php echo $date_text; ?>
-                                                </p>
+                                                <p class="text-muted small mb-0"><?= esc_html($date_text); ?></p>
                                             </div>
                                         </div>
                                     </div>
-                                <?php }
-                            }
+
+                                <?php endwhile;
+                            endif;
+
+                            wp_reset_postdata();
                             ?>
-                            <?php wp_reset_postdata(); ?>
 
                         </div>
 
-                        <!-- mobile: similar jobs carousel -->
-                        <div class="d-lg-none mt-4">
-                            <h6 class="fw-bold mb-3">شغل‌های مشابه</h6>
-                            <div id="similarJobsCarousel" class="carousel slide" data-bs-ride="carousel"
-                                data-bs-interval="5000">
-                                <div class="carousel-inner">
-                                    <!-- 1st item -->
-                                    <div class="carousel-item active">
-                                        <div class="card shadow-sm border-0 mx-3">
-                                            <div class="card-body d-flex gap-3 align-items-start">
-                                                <img src="https://via.placeholder.com/48x48.png?text=GJ"
-                                                    alt="Gojek Logo" class="rounded" width="48" height="48">
-                                                <div class="flex-grow-1">
-                                                    <h6 class="fw-bold mb-1">Lead UI Designer</h6>
-                                                    <p class="text-muted small mb-1">Gojek · Jakarta</p>
-                                                    <div class="d-flex flex-wrap gap-2 mb-2">
-                                                        <span class="badge bg-light text-dark">تمام‌وقت</span>
-                                                        <span class="badge bg-light text-dark">حضوری</span>
-                                                        <span class="badge bg-light text-dark">۳ تا ۵ سال</span>
+                        <!-- mobile: recent jobs carousel -->
+                        <?php if ($job_cards->have_posts()): ?>
+                            <div class="d-lg-none mt-4">
+                                <h6 class="fw-bold mb-3">شغل‌های مشابه</h6>
+
+                                <div id="similarJobsCarousel" class="carousel slide" data-bs-ride="carousel"
+                                    data-bs-interval="5000">
+                                    <div class="carousel-inner">
+                                        <?php
+                                        $first = true;
+                                        while ($job_cards->have_posts()):
+                                            $job_cards->the_post();
+                                            $post_id = get_the_ID();
+                                            $employer_id = get_post_field('post_author', $post_id);
+                                            $employer_nick = get_user_meta($employer_id, 'nickname', true) ?: get_the_author_meta('display_name', $employer_id);
+                                            $employer_logo = get_field('company_logo', 'user_' . $employer_id);
+                                            $logo_url = $employer_logo ?: get_template_directory_uri() . '/assets/photo/placeholder.png';
+                                            $diff_days = floor((current_time('timestamp') - get_the_time('U')) / DAY_IN_SECONDS);
+                                            $date_text = ($diff_days < 1) ? 'امروز' : $diff_days . ' روز پیش';
+                                            $job_location = get_post_field('job_location', $post_id);
+                                            $job_type = get_field('job_type');
+                                            $job_experience = get_field('job_experience');
+                                            ?>
+
+                                            <div class="carousel-item <?= $first ? 'active' : '' ?>">
+                                                <div class="card shadow-sm border-0 mx-3">
+                                                    <div class="card-body d-flex gap-3 align-items-start">
+                                                        <img src="<?= esc_url($logo_url); ?>"
+                                                            alt="<?= esc_attr($employer_nick); ?> Logo" class="rounded"
+                                                            width="48" height="48">
+                                                        <div class="flex-grow-1">
+                                                            <a class="text-reset text-decoration-none"
+                                                                href="<?= get_permalink(); ?>">
+                                                                <h6 class="fw-bold mb-2"><?= get_the_title(); ?></h6>
+                                                            </a>
+                                                            <p class="text-muted small mb-3"><?= esc_html($employer_nick); ?> ·
+                                                                <?= esc_html($job_location); ?>
+                                                            </p>
+                                                            <div class="d-flex flex-wrap gap-2 mb-2">
+                                                                <?php if ($job_type): ?>
+                                                                    <span
+                                                                        class="badge bg-light text-dark"><?= esc_html($job_type); ?></span>
+                                                                <?php endif; ?>
+                                                                <span
+                                                                    class="badge bg-light text-dark"><?php echo $job_experience ? 'حداقل ' . $job_experience . ' سال سابقه کاری مرتبط' : 'بدون نیاز به سابقه کاری مرتبط'; ?>
+                                                                </span>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <p class="text-muted small mb-0">۲ روز پیش · ۵۲۱ متقاضی</p>
                                                 </div>
                                             </div>
-                                        </div>
+
+                                            <?php
+                                            $first = false;
+                                        endwhile;
+                                        wp_reset_postdata();
+                                        ?>
                                     </div>
 
-                                    <!-- 2nd item -->
-                                    <div class="carousel-item">
-                                        <div class="card shadow-sm border-0 mx-3">
-                                            <div class="card-body d-flex gap-3 align-items-start">
-                                                <img src="https://via.placeholder.com/48x48.png?text=GP"
-                                                    alt="GoPay Logo" class="rounded" width="48" height="48">
-                                                <div class="flex-grow-1">
-                                                    <h6 class="fw-bold mb-1">Sr. UX Designer</h6>
-                                                    <p class="text-muted small mb-1">GoPay · Jakarta</p>
-                                                    <div class="d-flex flex-wrap gap-2 mb-2">
-                                                        <span class="badge bg-light text-dark">تمام‌وقت</span>
-                                                        <span class="badge bg-light text-dark">ریموت</span>
-                                                        <span class="badge bg-light text-dark">۳ تا ۵ سال</span>
-                                                    </div>
-                                                    <p class="text-muted small mb-0">۱ روز پیش · ۳۱۲ متقاضی</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- 3th item -->
-                                    <div class="carousel-item active">
-                                        <div class="card shadow-sm border-0 mx-3">
-                                            <div class="card-body d-flex gap-3 align-items-start">
-                                                <img src="https://via.placeholder.com/48x48.png?text=GJ"
-                                                    alt="Gojek Logo" class="rounded" width="48" height="48">
-                                                <div class="flex-grow-1">
-                                                    <h6 class="fw-bold mb-1">Lead UI Designer</h6>
-                                                    <p class="text-muted small mb-1">Gojek · Jakarta</p>
-                                                    <div class="d-flex flex-wrap gap-2 mb-2">
-                                                        <span class="badge bg-light text-dark">تمام‌وقت</span>
-                                                        <span class="badge bg-light text-dark">حضوری</span>
-                                                        <span class="badge bg-light text-dark">۳ تا ۵ سال</span>
-                                                    </div>
-                                                    <p class="text-muted small mb-0">۲ روز پیش · ۵۲۱ متقاضی</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- 4th item -->
-                                    <div class="carousel-item">
-                                        <div class="card shadow-sm border-0 mx-3">
-                                            <div class="card-body d-flex gap-3 align-items-start">
-                                                <img src="https://via.placeholder.com/48x48.png?text=GP"
-                                                    alt="GoPay Logo" class="rounded" width="48" height="48">
-                                                <div class="flex-grow-1">
-                                                    <h6 class="fw-bold mb-1">Sr. UX Designer</h6>
-                                                    <p class="text-muted small mb-1">GoPay · Jakarta</p>
-                                                    <div class="d-flex flex-wrap gap-2 mb-2">
-                                                        <span class="badge bg-light text-dark">تمام‌وقت</span>
-                                                        <span class="badge bg-light text-dark">ریموت</span>
-                                                        <span class="badge bg-light text-dark">۳ تا ۵ سال</span>
-                                                    </div>
-                                                    <p class="text-muted small mb-0">۱ روز پیش · ۳۱۲ متقاضی</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
+                                    <!-- کنترل‌ها -->
+                                    <button class="carousel-control-prev" type="button"
+                                        data-bs-target="#similarJobsCarousel" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon"></span>
+                                        <span class="visually-hidden">قبلی</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button"
+                                        data-bs-target="#similarJobsCarousel" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon"></span>
+                                        <span class="visually-hidden">بعدی</span>
+                                    </button>
                                 </div>
-
-                                <!-- دکمه‌های کنترل -->
-                                <button class="carousel-control-prev" type="button"
-                                    data-bs-target="#similarJobsCarousel" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon"></span>
-                                    <span class="visually-hidden">قبلی</span>
-                                </button>
-                                <button class="carousel-control-next" type="button"
-                                    data-bs-target="#similarJobsCarousel" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon"></span>
-                                    <span class="visually-hidden">بعدی</span>
-                                </button>
                             </div>
-
-                        </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

@@ -157,6 +157,18 @@
                         if (!empty($filters['name_search'])) {
                             $job_posts['s'] = sanitize_text_field($filters['name_search']);
                         }
+                        $meta_query[] = [
+                            'relation' => 'OR',
+                            [
+                                'key' => 'job_status',
+                                'value' => 'غیرفعال',
+                                'compare' => '!='
+                            ],
+                            [
+                                'key' => 'job_status',
+                                'compare' => 'NOT EXISTS'
+                            ]
+                        ];
                         if (!empty($meta_query)) {
                             $job_posts['meta_query'] = $meta_query;
                         }
@@ -178,7 +190,9 @@
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between align-items-start mb-2">
                                                 <div>
+                                                    <a href="<?php echo get_permalink(); ?>" class="text-reset text-decoration-none">
                                                     <h6 class="fw-bold mb-1"><?php echo get_the_title() ?></h6>
+                                                    </a>
                                                     <small
                                                         class="text-muted"><?php echo get_the_author() . ' . ' . get_field('job_category') ?>
                                                     </small>
@@ -193,7 +207,7 @@
                                                 </div>
                                                 <div class="w-100 mt-2">
                                                     <span class="badge bg-light text-dark">
-                                                        <?php echo 'حداقل سابقه مرتبط: ' . get_field('job_experience'); ?>
+                                                        <?php echo get_field('job_experience')?'حداقل سابقه مرتبط: ' . get_field('job_experience'):'بدون نیاز به سابقه کاری مرتبط'; ?>
                                                     </span>
                                                 </div>
                                             </div>

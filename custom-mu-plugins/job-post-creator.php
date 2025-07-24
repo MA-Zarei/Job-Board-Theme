@@ -36,6 +36,8 @@ function submit_job_post()
     if (is_wp_error($post_id)) {
         wp_send_json_error(['message' => 'خطا در ایجاد آگهی']);
     }
+    $employer_name = $user->nickname ?: $user->display_name;
+    update_field('job_auther', $employer_name, $post_id);
 
     // ذخیره فیلدهای ACF
     $acf_fields = [
