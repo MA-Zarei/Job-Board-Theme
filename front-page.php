@@ -65,7 +65,7 @@
                     فیلترها
                 </button>
                 <!-- cards container-->
-                <div class="row g-3 justify-content-start">
+                <div class="row g-3 justify-content-start pb-4">
                     <!-- card -->
                     <?php
                     $filters = [
@@ -266,7 +266,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="بستن"></button>
     </div>
 
-    <div class="offcanvas-body px-3"> <!-- فضای داخلی از چپ و راست -->
+    <div class="offcanvas-body px-3"> <!-- inner space -->
         <?php get_template_part('template-parts/job-filter-form'); ?>
     </div>
 </div>

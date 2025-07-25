@@ -25,10 +25,10 @@
 </head>
 
 <body <?php
-if (is_page('employer-dashboard')){
-    body_class('bg-light d-flex flex-column min-vh-100')    ;
-} else{
-body_class('d-flex flex-column min-vh-100');
+if (is_page('employer-dashboard') || is_page('jobseeker-dashboard')) {
+    body_class('bg-light d-flex flex-column min-vh-100');
+} else {
+    body_class('d-flex flex-column min-vh-100');
 }
 ?>>
     <nav class="navbar navbar-expand-lg bg-light navbar-light border-bottom shadow-sm  mb-4">

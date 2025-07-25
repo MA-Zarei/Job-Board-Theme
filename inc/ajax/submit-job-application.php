@@ -1,18 +1,23 @@
 <?php
-add_action('wp_ajax_submit_job_application', 'handle_job_application');
-add_action('wp_ajax_nopriv_submit_job_application', 'handle_job_application');
+/**
+ * Handles AJAX submission of job applications.
+ * Creates a new job_application post and uploads resume file.
+ */
 
-function handle_job_application()
-{
+function handle_job_application() {
+    // Require user to be logged in
     if (!is_user_logged_in()) {
-        wp_send_json_error(['message' => 'برای ارسال درخواست باید وارد حساب شوید']);
+        wp_send_json_error(['message' => 'You must be logged in to submit a job application']);
     }
 
+    // Get current user ID and job ID
     $user_id = get_current_user_id();
     $job_id  = intval($_POST['job_id']);
     $file    = $_FILES['resume'];
 
-    // بررسی تکراری نبودن درخواست
+    /**
+     * Check if user has already applied to this job
+     */
     $existing = get_posts([
         'post_type'  => 'job_application',
         'meta_query' => [
@@ -22,26 +27,30 @@ function handle_job_application()
     ]);
 
     if (!empty($existing)) {
-        wp_send_json_error(['message' => 'شما قبلاً برای این آگهی درخواست ارسال کرده‌اید']);
+        wp_send_json_error(['message' => 'You have already submitted an application for this job']);
     }
 
-    // ساخت پست درخواست
+    /**
+     * Create a new job_application post
+     */
     $application_id = wp_insert_post([
         'post_type'   => 'job_application',
-        'post_title'  => 'درخواست کارجو ' . get_the_author_meta('nickname', $user_id),
+        'post_title'  => 'Application by ' . get_the_author_meta('nickname', $user_id),
         'post_status' => 'publish',
         'post_author' => $user_id,
     ]);
 
-    // آپلود فایل رزومه
+    /**
+     * Upload resume file and attach to post
+     */
     require_once ABSPATH . 'wp-admin/includes/file.php';
     $uploaded = wp_handle_upload($file, ['test_form' => false]);
 
     if (isset($uploaded['error'])) {
-        wp_send_json_error(['message' => 'آپلود فایل ناموفق بود']);
+        wp_send_json_error(['message' => 'Resume upload failed']);
     }
 
-    // ساخت ضمیمه و اتصال به رسانه‌ها
+    // Prepare media attachment
     require_once ABSPATH . 'wp-admin/includes/image.php';
 
     $attachment = [
@@ -54,15 +63,20 @@ function handle_job_application()
 
     $attachment_id = wp_insert_attachment($attachment, $uploaded['file'], $application_id);
 
+    // Generate attachment metadata
     $attach_data = wp_generate_attachment_metadata($attachment_id, $uploaded['file']);
     wp_update_attachment_metadata($attachment_id, $attach_data);
 
-    // ذخیره فیلدها
+    /**
+     * Save post meta fields
+     */
     update_post_meta($application_id, 'job_id',          $job_id);
     update_post_meta($application_id, 'jobseeker_id',    $user_id);
-    update_post_meta($application_id, 'resume_file',     $attachment_id); // ذخیره آیدی فایل برای ACF
+    update_post_meta($application_id, 'resume_file',     $attachment_id); // For ACF relationship
     update_post_meta($application_id, 'submission_date', current_time('Y-m-d'));
 
-    // ارسال موفقیت‌آمیز
-    wp_send_json_success(['message' => 'درخواست شما با موفقیت ثبت شد']);
+    /**
+     * Return success response
+     */
+    wp_send_json_success(['message' => 'Your application has been successfully submitted']);
 }

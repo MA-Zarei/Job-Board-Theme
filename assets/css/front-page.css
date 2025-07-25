@@ -1,8 +1,3 @@
-body {
-    font-family: "Vazirmatn";
-    font-weight: 400;
-}
-
 /* mid part color for price filter slider */
 .noUi-connect {
   background: var(--bs-primary);

@@ -1,44 +1,19 @@
-<?php
-/**
- * Template Name: employer-dashboard
- */
-?>
-
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-
-<head>
-    <meta charset="UTF-8">
-    <title>داشبورد کارفرما</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Bootstrap RTL -->
-    <link rel="stylesheet"
-        href="<?php echo get_template_directory_uri(); ?>/assets/bootstrap/css/bootstrap.rtl.min.css">
-    <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>./assets/css/font.css">
-    <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>./assets/css/style.css">
-</head>
-
-<body class="bg-light d-flex flex-column min-vh-100">
-    <?php get_header(); ?>
+<?php get_header(); ?>
     <main class="flex-grow-1">
         <div class="container py-5">
-
             <!-- dashboard header -->
             <div class="mb-4 text-center">
                 <h4 class="fw-bold">داشبورد کارفرما</h4>
                 <p class="text-muted">مدیریت شرکت و آگهی‌های استخدامی</p>
             </div>
-
             <div class="row g-4">
-
                 <!-- employer specs -->
                 <div class="col-12 col-lg-4">
                     <div class="card shadow-sm">
                         <div class="card-body" id="profileCard">
                             <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
                                 <h5 class="fw-bold mb-0">مشخصات شرکت</h5>
-
-                                <!-- لوگو -->
+                                <!-- logo -->
                                 <div>
                                     <img id="companyLogoPreview"
                                         src="<?= esc_url(get_field('company_logo', 'user_' . get_current_user_id()) ?: get_template_directory_uri() . '/assets/photo/placeholder.png'); ?>"
@@ -49,8 +24,7 @@
                                         class="form-control form-control-sm d-none mt-2" accept="image/*" />
                                 </div>
                             </div>
-
-                            <!-- نام شرکت -->
+                            <!-- company name -->
                             <div class="mb-2">
                                 <strong>نام شرکت:</strong>
                                 <span class="text-muted"
@@ -58,8 +32,7 @@
                                 <input type="text" class="form-control form-control-sm d-none" id="companyNameInput"
                                     value="<?= esc_attr(wp_get_current_user()->display_name); ?>">
                             </div>
-
-                            <!-- ایمیل -->
+                            <!-- email -->
                             <div class="mb-2">
                                 <strong>ایمیل:</strong>
                                 <span class="text-muted"
@@ -67,8 +40,7 @@
                                 <input type="email" class="form-control form-control-sm d-none" id="companyEmailInput"
                                     value="<?= esc_attr(wp_get_current_user()->user_email); ?>" readonly>
                             </div>
-
-                            <!-- شماره تماس -->
+                            <!-- contact number -->
                             <div class="mb-2">
                                 <strong>شماره تماس:</strong>
                                 <span class="text-muted" dir="ltr"
@@ -76,8 +48,7 @@
                                 <input type="tel" class="form-control form-control-sm d-none" id="contactNumberInput"
                                     value="<?= esc_attr(get_field('contact_number', 'user_' . get_current_user_id())); ?>">
                             </div>
-
-                            <!-- آدرس -->
+                            <!-- address -->
                             <div class="mb-2">
                                 <strong>آدرس:</strong>
                                 <span class="text-muted"
@@ -85,8 +56,7 @@
                                 <textarea class="form-control form-control-sm d-none"
                                     id="companyAddressInput"><?= esc_textarea(get_field('company_address', 'user_' . get_current_user_id())); ?></textarea>
                             </div>
-
-                            <!-- دکمه‌ها -->
+                            <!-- btns -->
                             <div class="text-center mt-3" id="profileButtons">
                                 <button type="button" id="editProfileBtn"
                                     class="btn btn-outline-primary btn-sm w-100">ویرایش اطلاعات</button>
@@ -94,15 +64,12 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- list of jobs -->
                 <div class="col-12 col-lg-8">
                     <div class="card shadow-sm">
                         <div class="card-body">
-
                             <div class="accordion" id="jobAccordion">
-
-                                <!-- آکاردئون 1: آگهی‌های فعال -->
+                                <!-- 1st accordion - submitted jobs -->
                                 <div class="accordion-item">
                                     <h2 class="accordion-header" id="headingJobs">
                                         <button class="accordion-button" type="button" data-bs-toggle="collapse"
@@ -114,10 +81,8 @@
                                     <div id="collapseJobs" class="accordion-collapse collapse show"
                                         aria-labelledby="headingJobs" data-bs-parent="#jobAccordion">
                                         <div class="accordion-body">
-
                                             <?php
                                             $current_user_id = get_current_user_id();
-
                                             $args = [
                                                 'post_type' => 'job',
                                                 'post_status' => 'publish',
@@ -126,10 +91,8 @@
                                                 'order' => 'DESC',
                                                 'posts_per_page' => -1,
                                             ];
-
                                             $jobs = get_posts($args);
                                             ?>
-
                                             <div class="table-responsive">
                                                 <table class="table table-striped align-middle text-nowrap">
                                                     <thead class="table-light">
@@ -146,7 +109,7 @@
                                                             $job_id = $job->ID;
                                                             $title = get_the_title($job_id);
                                                             $date = get_the_date('Y/m/d', $job_id);
-                                                            $status = get_field('job_status', $job_id); // 'active' یا 'inactive'
+                                                            $status = get_field('job_status', $job_id); // 'فعال' or 'غیرفعال'
                                                             $is_active = ($status === 'فعال');
 
                                                             $applications = get_posts([
@@ -183,7 +146,6 @@
                                                                             class="form-check-label mb-0">
                                                                             <?= esc_html($status) ?>
                                                                         </label>
-
                                                                     </div>
                                                                 </td>
                                                                 <td>
@@ -196,8 +158,7 @@
                                                                     </button>
                                                                 </td>
                                                             </tr>
-
-                                                            <!-- آکاردئون رزومه‌ها -->
+                                                            <!-- resume accorsion -->
                                                             <tr class="collapse" id="resumes-<?= $job_id ?>">
                                                                 <td colspan="5">
                                                                     <?php if ($res_count): ?>
@@ -255,8 +216,7 @@
                                                                                                         </option>
                                                                                                     <?php endforeach; ?>
                                                                                                 </select>
-
-                                                                                                <!-- دکمه اعمال تغییر -->
+                                                                                                <!-- apply changes btn -->
                                                                                                 <button type="button"
                                                                                                     class="btn btn-sm btn-outline-success apply-status-btn"
                                                                                                     data-application-id="<?= $app->ID ?>">
@@ -282,8 +242,7 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <!-- آکاردئون 2: ساخت آگهی جدید -->
+                                <!-- 2nd accordion - sumbit new job -->
                                 <div class="accordion-item mt-3">
                                     <h2 class="accordion-header" id="headingCreate">
                                         <button class="accordion-button collapsed" type="button"
@@ -296,19 +255,19 @@
                                         aria-labelledby="headingCreate" data-bs-parent="#jobAccordion">
                                         <div class="accordion-body">
                                             <form id="createJobForm" class="row g-3">
-                                                <!-- عنوان آگهی -->
+                                                <!-- job name -->
                                                 <div class="col-12">
                                                     <label for="job_title" class="form-label">عنوان آگهی</label>
                                                     <input type="text" class="form-control" id="job_title"
                                                         name="job_title" required>
                                                 </div>
-                                                <!-- شرح آگهی -->
+                                                <!-- job description -->
                                                 <div class="col-12">
                                                     <label for="job_content" class="form-label">شرح آگهی</label>
                                                     <textarea class="form-control" id="job_content" name="job_content"
                                                         rows="4" required></textarea>
                                                 </div>
-                                                <!-- دسته‌بندی شغل -->
+                                                <!-- job category -->
                                                 <div class="col-md-6">
                                                     <label for="job_category" class="form-label">دسته‌بندی شغل</label>
                                                     <select class="form-select" id="job_category" name="job_category"
@@ -325,7 +284,7 @@
                                                         ?>
                                                     </select>
                                                 </div>
-                                                <!-- شهر محل کار -->
+                                                <!-- job city -->
                                                 <div class="col-md-6">
                                                     <label for="job_location" class="form-label">شهر محل کار</label>
                                                     <select class="form-select" id="job_location" name="job_location"
@@ -342,7 +301,7 @@
                                                         ?>
                                                     </select>
                                                 </div>
-                                                <!-- نوع قرارداد -->
+                                                <!-- job contract type -->
                                                 <div class="col-md-6">
                                                     <label for="job_type" class="form-label">نوع قرارداد</label>
                                                     <select class="form-select" id="job_type" name="job_type" required>
@@ -358,7 +317,7 @@
                                                         ?>
                                                     </select>
                                                 </div>
-                                                <!-- حداقل سابقه کار -->
+                                                <!-- min job experience -->
                                                 <div class="col-md-6">
                                                     <label for="job_experience" class="form-label">حداقل سابقه کار
                                                         (سال)</label>
@@ -366,7 +325,7 @@
                                                         name="job_experience" min="0"
                                                         placeholder="در صورت عدم اهمیت این مقدار را خالی بگذارید">
                                                 </div>
-                                                <!-- جنسیت -->
+                                                <!-- gender -->
                                                 <div class="col-md-6">
                                                     <label for="gender" class="form-label">جنسیت</label>
                                                     <select class="form-select" id="gender" name="gender" required>
@@ -382,7 +341,7 @@
                                                         ?>
                                                     </select>
                                                 </div>
-                                                <!-- وضعیت نظام وظیفه -->
+                                                <!-- military status -->
                                                 <div class="col-md-6">
                                                     <label for="military_status" class="form-label">وضعیت نظام
                                                         وظیفه</label>
@@ -400,7 +359,7 @@
                                                         ?>
                                                     </select>
                                                 </div>
-                                                <!-- حداقل مدرک تحصیلی -->
+                                                <!-- min education -->
                                                 <div class="col-md-6">
                                                     <label for="min_education" class="form-label">حداقل مدرک
                                                         تحصیلی</label>
@@ -418,7 +377,7 @@
                                                         ?>
                                                     </select>
                                                 </div>
-                                                <!-- حقوق تقریبی -->
+                                                <!-- job salary -->
                                                 <div class="col-md-6">
                                                     <label for="job_salary" class="form-label">حقوق تقریبی (میلیون
                                                         تومان)</label>
@@ -426,7 +385,7 @@
                                                         name="job_salary" min="0"
                                                         placeholder="در صورت توافقی بودن، این مقدار را خالی بگذارید">
                                                 </div>
-                                                <!-- وضعیت آگهی -->
+                                                <!-- job status -->
                                                 <div class="col-md-6">
                                                     <label for="job_status" class="form-label">وضعیت آگهی</label>
                                                     <select class="form-select" id="job_status" name="job_status"
@@ -442,7 +401,7 @@
                                                         ?>
                                                     </select>
                                                 </div>
-                                                <!-- دکمه ثبت -->
+                                                <!-- submit btn -->
                                                 <div class="col-12 text-end mt-4">
                                                     <button type="submit" class="btn btn-primary">ثبت آگهی</button>
                                                 </div>
@@ -460,15 +419,4 @@
             </div>
         </div>
     </main>
-    <?php get_footer(); ?>
-
-
-    <!-- Bootstrap JS -->
-    <script src="<?php echo get_template_directory_uri(); ?>/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="<?php echo get_template_directory_uri(); ?>/assets/js/edit-profile.js"></script>
-    <script src="<?php echo get_template_directory_uri(); ?>/assets/js/create-job.js"></script>
-    <script src="<?php echo get_template_directory_uri(); ?>/assets/js/manage-job.js"></script>
-    <script src="<?php echo get_template_directory_uri(); ?>/assets/js/application-status.js"></script>
-</body>
-
-</html>
+<?php get_footer(); ?>
