@@ -1,27 +1,11 @@
-/*!
-Theme Name: Job Board
-Author: ma_zre
-Description: it's a test for your abilities
+/*
+Theme Name: JobBoard Custom Theme
+Author: M. Amin Zarei
+Author URI: https://github.com/MA-Zarei/
+Description: A responsive and custom WordPress theme developed for a job board website. It includes a homepage listing all job posts, single job detail pages, login and registration pages with role-based access, and custom dashboards for employers and jobseekers. Two custom user roles are defined: 'employer' and 'jobseeker'. Two custom post types are used: 'job' for job listings and 'job_application' for managing applications. All post types include custom fields created with Advanced Custom Fields (ACF). Employers can post jobs with fields like job category, location, contract type, experience, salary, education level, military status, and more. Jobseekers can apply to jobs and upload their resume. Each application contains fields such as the related job, resume file, jobseeker ID, status, employer note, and submission date. Custom profile fields are also added for both employers (e.g. contact number, company address, logo) and jobseekers (e.g. contact number).
 Version: 1.0.0
-Tested up to: 5.4
-Requires PHP: 5.6
 License: GNU General Public License v2 or later
-License URI: LICENSE
-Text Domain: a-theme-for-technical-task
-Tags: custom-background, custom-logo, custom-menu, featured-images, threaded-comments, translation-ready
-
-This theme, like WordPress, is licensed under the GPL.
-Use it to make something cool, have fun, and share what you've learned.
-
-JobSearch is based on Underscores https://underscores.me/, (C) 2012-2020 Automattic, Inc.
-Underscores is distributed under the terms of the GNU GPL v2 or later.
-
-Normalizing styles have been helped along thanks to the fine work of
-Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: jobboard-theme
+Tags: custom-theme, responsive, job-board, acf, roles, dashboard
 */
-
-body {
-    font-family: "Vazirmatn";
-    font-weight: 400;
-    color: red !important;
-}

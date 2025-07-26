@@ -18,7 +18,7 @@
                                     <img id="companyLogoPreview"
                                         src="<?= esc_url(get_field('company_logo', 'user_' . get_current_user_id()) ?: get_template_directory_uri() . '/assets/photo/placeholder.png'); ?>"
                                         alt="لوگوی شرکت <?= esc_attr(wp_get_current_user()->display_name); ?>"
-                                        class="rounded shadow-sm"
+                                        class="rounded shadow-sm object-fit-cover"
                                         style="width: 64px; height: 64px; object-fit: cover;" />
                                     <input type="file" id="companyLogoInput"
                                         class="form-control form-control-sm d-none mt-2" accept="image/*" />

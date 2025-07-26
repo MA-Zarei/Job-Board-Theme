@@ -17,7 +17,7 @@
             $page_title = ' | ' . get_the_title();
         }
         ;
-        echo $page_title ? $page_title . ' | ' . bloginfo('name') : bloginfo('name');
+        echo $page_title ? $page_title . bloginfo('name') : bloginfo('name');
         ?>
     </title>
     <meta name="viewport" content="width=device-width, initial-scale=1">

@@ -170,19 +170,26 @@
                             }
                             ?>
                             <div class="col-12 col-sm-6 col-xl-3">
-                                <div class="card h-100 shadow-sm">
-                                    <div class="card-body">
+                                <!-- Job post card container with full height and vertical layout -->
+                                <div class="card h-100 shadow-sm d-flex flex-column">
+
+                                    <!-- Card body acts as a flex column to allow footer stickiness -->
+                                    <div class="card-body d-flex flex-column flex-grow-1">
+
+                                        <!-- Header section: title, author, and category -->
                                         <div class="d-flex justify-content-between align-items-start mb-2">
                                             <div>
                                                 <a href="<?php echo get_permalink(); ?>"
                                                     class="text-reset text-decoration-none">
-                                                    <h6 class="fw-bold mb-1"><?php echo get_the_title() ?></h6>
+                                                    <h6 class="fw-bold mb-1"><?php echo get_the_title(); ?></h6>
                                                 </a>
-                                                <small
-                                                    class="text-muted"><?php echo get_the_author() . ' . ' . get_field('job_category') ?>
+                                                <small class="text-muted">
+                                                    <?php echo get_the_author() . ' . ' . get_field('job_category'); ?>
                                                 </small>
                                             </div>
                                         </div>
+
+                                        <!-- Middle section: location, type, experience badges -->
                                         <div class="d-flex flex-wrap mb-3">
                                             <div class="d-flex gap-2 w-100">
                                                 <span
@@ -192,27 +199,29 @@
                                             </div>
                                             <div class="w-100 mt-2">
                                                 <span class="badge bg-light text-dark">
-                                                    <?php echo get_field('job_experience') ? 'حداقل سابقه مرتبط: ' . get_field('job_experience') : 'بدون نیاز به سابقه کاری مرتبط'; ?>
+                                                    <?php echo get_field('job_experience')
+                                                        ? 'حداقل سابقه مرتبط: ' . get_field('job_experience')
+                                                        : 'بدون نیاز به سابقه کاری مرتبط'; ?>
                                                 </span>
                                             </div>
                                         </div>
-                                        <p class="text-muted small mb-2"><?php echo $date_text; ?></p>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <span class="fw-bold text-primary">
-                                                <?php
-                                                if (get_field('job_salary')) {
-                                                    echo get_field('job_salary') . ' میلیون تومان';
-                                                } else {
-                                                    echo 'توافقی';
-                                                }
-                                                ?>
-                                            </span>
-                                            <a href="<?php echo get_permalink(); ?>" class="btn btn-primary btn-sm">
-                                                ارسال درخواست
-                                            </a>
+
+                                        <!-- Sticky footer section always pinned to bottom -->
+                                        <div class="mt-auto">
+                                            <p class="text-muted small mb-2"><?php echo $date_text; ?></p>
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <span class="fw-bold text-primary">
+                                                    <?php echo get_field('job_salary')
+                                                        ? get_field('job_salary') . ' میلیون تومان'
+                                                        : 'توافقی'; ?>
+                                                </span>
+                                                <a href="<?php echo get_permalink(); ?>" class="btn btn-primary btn-sm">ارسال
+                                                    درخواست</a>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
+
+                                    </div> <!-- End of card-body -->
+                                </div> <!-- End of card -->
                             </div>
                             <?php
                         }

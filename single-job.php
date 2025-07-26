@@ -15,7 +15,7 @@
                     <div class="flex-shrink-0">
                         <img src="<?= esc_url(get_field('company_logo', 'user_' . get_post_field('post_author')) ?: get_template_directory_uri() . '/assets/photo/placeholder.png') ?>"
                             alt="لوگوی <?= esc_attr(get_user_meta(get_post_field('post_author'), 'nickname', true) ?: get_the_author_meta('display_name', get_post_field('post_author'))) ?>"
-                            class="img-fluid rounded shadow" width="96" height="96">
+                            class="img-fluid rounded shadow object-fit-cover" width="96" height="96">
                     </div>
 
                     <!-- Job title, author name, location, type, experience -->
@@ -47,7 +47,7 @@
                 <!-- Job description section -->
                 <h6 class="fw-bold mt-4">شرح موقعیت شغلی</h6>
                 <p>
-                    <?php echo get_the_content(); ?>
+                    <?php echo nl2br(esc_html(get_the_content())); ?>
                 </p>
 
                 <hr>
@@ -161,7 +161,7 @@
                                 <div class="card-body d-flex gap-3 align-items-start">
                                     <!-- Company logo -->
                                     <img src="<?= esc_url($logo_url); ?>" alt="لوگوی <?= esc_attr($employer_nick); ?>"
-                                        class="rounded" width="48" height="48">
+                                        class="rounded object-fit-cover" width="48" height="48">
 
                                     <div class="flex-grow-1">
                                         <!-- Job title with permalink -->
@@ -232,7 +232,7 @@
                                             <div class="card-body d-flex gap-3 align-items-start">
                                                 <!-- Logo -->
                                                 <img src="<?= esc_url($logo_url); ?>"
-                                                    alt="<?= esc_attr($employer_nick); ?> Logo" class="rounded" width="48"
+                                                    alt="<?= esc_attr($employer_nick); ?> Logo" class="rounded object-fit-cover" width="48"
                                                     height="48">
 
                                                 <!-- Job content -->

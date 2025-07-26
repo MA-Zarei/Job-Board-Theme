@@ -117,22 +117,22 @@ add_action('wp_enqueue_scripts', 'theme_enqueue_scripts');
 
 // Hook into template_redirect to intercept page access
 add_action('template_redirect', function () {
-    // Redirect guests to homepage
-    if (!is_user_logged_in()) {
+    // Apply guest redirect only on dashboard pages, not globally
+    if (!is_user_logged_in() && is_page(['employer-dashboard', 'jobseeker-dashboard'])) {
         wp_redirect(home_url());
         exit;
     }
-    // Only apply logic to specific dashboard pages
-    if (is_page(['employer-dashboard', 'jobseeker-dashboard'])) {
+
+    // Proceed with role-based restrictions for logged-in users
+    if (is_user_logged_in() && is_page(['employer-dashboard', 'jobseeker-dashboard'])) {
         $user = wp_get_current_user();
-        // Get user's primary role (assuming first one is main)
         $role = $user->roles[0] ?? '';
-        // Redirect if visiting employer dashboard without proper role
+
         if (is_page('employer-dashboard') && $role !== 'employer') {
             wp_redirect(home_url());
             exit;
         }
-        // Redirect if visiting jobseeker dashboard without proper role
+
         if (is_page('jobseeker-dashboard') && $role !== 'jobseeker') {
             wp_redirect(home_url());
             exit;
